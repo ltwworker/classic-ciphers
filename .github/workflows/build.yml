@@ -39,25 +39,13 @@ jobs:
       
       - name: Build with PyInstaller
         run: |
-          pyinstaller --onefile --windowed --name CipherApp main.py || echo "PyInstaller failed"
-          ls -la dist/ || echo "dist folder not found"
-      
-      - name: Rename artifact
-        run: |
-          if [ -f "dist/CipherApp${{ matrix.file_extension }}" ]; then
-            mv dist/CipherApp${{ matrix.file_extension }} dist/${{ matrix.artifact_name }}${{ matrix.file_extension }}
-          else
-            echo "File not found, skipping rename"
-            exit 1
-          fi
-        shell: bash
+          pyinstaller --onefile --windowed --name CipherApp main.py
       
       - name: Upload artifact
-        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact_name }}
-          path: dist/${{ matrix.artifact_name }}${{ matrix.file_extension }}
+          path: dist/CipherApp${{ matrix.file_extension }}
 
   release:
     name: Create Release
