@@ -14,7 +14,7 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            artifact_name: CipherApp-windows
+            artifact_name: CipherApp-windows.exe
             file_extension: .exe
           - os: ubuntu-latest
             artifact_name: CipherApp-linux
@@ -39,12 +39,7 @@ jobs:
       
       - name: Build with PyInstaller
         run: |
-          pyinstaller --windowed --name CipherApp main.py
-      
-      - name: Rename artifact
-        run: |
-          mv dist/CipherApp${{ matrix.file_extension }} dist/${{ matrix.artifact_name }}${{ matrix.file_extension }}
-        shell: bash
+          pyinstaller --onefile --windowed --name ${{ matrix.artifact_name }} main.py
       
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -66,7 +61,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            CipherApp-windows/CipherApp-windows.exe
+            CipherApp-windows.exe/CipherApp-windows.exe
             CipherApp-linux/CipherApp-linux
             CipherApp-macos/CipherApp-macos
           draft: false
