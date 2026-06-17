@@ -1,0 +1,76 @@
+```yaml
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            artifact_name: CipherApp-windows
+            file_extension: .exe
+          - os: ubuntu-latest
+            artifact_name: CipherApp-linux
+            file_extension: ''
+          - os: macos-latest
+            artifact_name: CipherApp-macos
+            file_extension: ''
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller
+      
+      - name: Build with PyInstaller
+        run: |
+          pyinstaller --windowed --name CipherApp main.py
+      
+      - name: Rename artifact
+        run: |
+          mv dist/CipherApp${{ matrix.file_extension }} dist/${{ matrix.artifact_name }}${{ matrix.file_extension }}
+        shell: bash
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: dist/${{ matrix.artifact_name }}${{ matrix.file_extension }}
+
+  release:
+    name: Create Release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            CipherApp-windows/CipherApp-windows.exe
+            CipherApp-linux/CipherApp-linux
+            CipherApp-macos/CipherApp-macos
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
