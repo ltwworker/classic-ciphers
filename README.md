@@ -8,9 +8,9 @@
 - Шифр Полибия
 
 ## Скачать
-- [Windows](https://github.com/ВАШ_ЛОГИН/classic-ciphers/releases/latest/download/CipherApp-windows.exe)
-- [Linux](https://github.com/ВАШ_ЛОГИН/classic-ciphers/releases/latest/download/CipherApp-linux)
-- [macOS](https://github.com/ВАШ_ЛОГИН/classic-ciphers/releases/latest/download/CipherApp-macos)
+- [Windows](https://github.com/ltwworker/classic-ciphers/releases/latest/download/CipherApp-windows.exe)
+- [Linux](https://github.com/ltwworker/classic-ciphers/releases/latest/download/CipherApp-linux)
+- [macOS](https://github.com/ltwworker/classic-ciphers/releases/latest/download/CipherApp-macos)
 
 ## Запуск из исходников
 ```bash
